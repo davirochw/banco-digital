@@ -13,8 +13,8 @@ import java.util.List;
 
 public class CadastroDeContas {
     public static void main(String[] args) {
-        int tipo = 0;
-        double valor = 0;
+        int tipo;
+        double valor;
 
         Conta conta = null;
         Cliente cliente;
@@ -29,32 +29,23 @@ public class CadastroDeContas {
 
             try {
                 tipo = Integer.parseInt(JOptionPane.showInputDialog("Digite o tipo de conta: 1 - Conta Corrente, 2 - Conta Poupança: "));
-            } catch (InputMismatchException e) {
-                JOptionPane.showMessageDialog(null, "Digite um número válido!");
-                break;
-            }
-            if (tipo == 1) {
-                conta = new ContaCorrente(cliente);
-            } else if (tipo == 2) {
-                conta = new ContaPoupanca(cliente);
-            } else {
-                JOptionPane.showMessageDialog(null, "Digite um número válido!");
-                break;
-            }
-
-            try {
-                valor = Double.parseDouble(JOptionPane.showInputDialog("Digite o valor que deseja depositar: "));
-                conta.depositar(valor);
-
-                valor = Double.parseDouble(JOptionPane.showInputDialog("Digite o valor que deseja sacar: "));
-                conta.sacar(valor);
-                if (conta.saldo() < 0) {
-                    JOptionPane.showMessageDialog(null, "Saldo insuficiente!" + conta.saldo());
-                    valor = Double.parseDouble(JOptionPane.showInputDialog("Digite novamente valor que deseja sacar: "));
-                    break;
+                if (tipo == 1) {
+                    conta = new ContaCorrente(cliente);
+                } else if (tipo == 2) {
+                    conta = new ContaPoupanca(cliente);
                 }
             } catch (InputMismatchException e) {
                 JOptionPane.showMessageDialog(null, "Digite um número válido!");
+                break;
+            }
+
+            valor = Double.parseDouble(JOptionPane.showInputDialog("Digite o valor que deseja depositar: "));
+            conta.depositar(valor);
+
+            valor = Double.parseDouble(JOptionPane.showInputDialog("Digite o valor que deseja sacar: "));
+            conta.sacar(valor);
+            if (conta.saldo() < 0) {
+                JOptionPane.showMessageDialog(null, "Saldo insuficiente! O saldo da conta é:\n" + String.format("%.2f", conta.saldo() + valor) + " reais");
             }
 
             contas.add(conta);
@@ -66,7 +57,7 @@ public class CadastroDeContas {
                     int contaOrigem = Integer.parseInt(JOptionPane.showInputDialog("Digite a conta de origem: "));
                     int contaDestino = Integer.parseInt(JOptionPane.showInputDialog("Digite a conta de destino: "));
                     try {
-                    contas.get(contaOrigem - 1).transferir(valor, contas.get(contaDestino - 1));
+                        contas.get(contaOrigem - 1).transferir(valor, contas.get(contaDestino - 1));
                     } catch (IndexOutOfBoundsException e) {
                         JOptionPane.showMessageDialog(null, "Conta de origem ou destino inválida!");
                     }
@@ -85,4 +76,3 @@ public class CadastroDeContas {
         }
     }
 }
-
